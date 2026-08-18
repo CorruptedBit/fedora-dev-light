@@ -2,9 +2,9 @@
 #
 # COSMIC ships its own first-boot wizard, cosmic-initial-setup (packaged for
 # Fedora: https://packages.fedoraproject.org/pkgs/cosmic-initial-setup/), the
-# COSMIC equivalent of gnome-initial-setup. It handles user creation and
-# locale/network setup after Anaconda finishes installing the base OS, so we
-# hand those off to it instead of letting Anaconda do them.
+# COSMIC equivalent of gnome-initial-setup. In practice it doesn't reliably
+# launch on first boot, so we let Anaconda handle user/network/timezone setup
+# during install instead of relying on it.
 
 [customizations.installer.kickstart]
 contents = """
@@ -14,18 +14,18 @@ bootc switch --mutate-in-place --transport registry ghcr.io/corruptedbit/fedora-
 """
 
 [customizations.installer.modules]
-# Trimmed module set: cosmic-initial-setup handles user/network/timezone setup
-# on first boot, so Anaconda only needs to partition the disk.
 enable = [
   "org.fedoraproject.Anaconda.Modules.Storage",
-  "org.fedoraproject.Anaconda.Modules.Runtime"
-]
-
-disable = [
+  "org.fedoraproject.Anaconda.Modules.Runtime",
+  "org.fedoraproject.Anaconda.Modules.Localization",
   "org.fedoraproject.Anaconda.Modules.Network",
   "org.fedoraproject.Anaconda.Modules.Security",
   "org.fedoraproject.Anaconda.Modules.Services",
   "org.fedoraproject.Anaconda.Modules.Users",
-  "org.fedoraproject.Anaconda.Modules.Subscription",
   "org.fedoraproject.Anaconda.Modules.Timezone"
+]
+
+# Subscription-manager is RHEL-only, not applicable to Fedora.
+disable = [
+  "org.fedoraproject.Anaconda.Modules.Subscription"
 ]
