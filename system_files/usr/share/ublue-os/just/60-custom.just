@@ -1,7 +1,7 @@
 # Install dev tools via Homebrew
 [group('Dev Tools')]
 install-dev-tools:
-	brew install --cask claude-code visual-studio-code-linux zed-linux
+	brew install --cask claude-code
 	brew install starship git-graph zellij
 
 # Enable starship in bash

@@ -19,6 +19,30 @@ dnf5 copr enable -y ublue-os/packages
 dnf5 install -y just ublue-os-just ublue-os-luks
 dnf5 copr disable -y ublue-os/packages
 
+## VsCode from Microsoft
+rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+cat << 'EOF' > /etc/yum.repos.d/vscode.repo
+[code]
+name=Visual Studio Code
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1
+autorefresh=1
+type=rpm-md
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+EOF
+
+dnf5 install -y code
+
+## Terra Software (Zed editor)
+## Plain fedora-bootc doesn't ship the Terra repo files like ublue-os images
+## do, so bootstrap it ourselves (see https://docs.terrapkg.com/usage/installing/).
+dnf5 install -y --nogpgcheck --repofrompath "terra,https://repos.fyralabs.com/terra\$releasever" terra-release terra-gpg-keys
+dnf5 install -y zed
+dnf5 config-manager setopt terra.enabled=0
+rm -f /etc/yum.repos.d/terra*.repo
+
 #### Example for enabling a System Unit File
 systemctl enable podman.socket
 
