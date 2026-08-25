@@ -1,15 +1,12 @@
 # bootc-image-builder config for the bare-metal/VM installer ISO.
 #
-# COSMIC ships its own first-boot wizard, cosmic-initial-setup (packaged for
-# Fedora: https://packages.fedoraproject.org/pkgs/cosmic-initial-setup/), the
-# COSMIC equivalent of gnome-initial-setup. In practice it doesn't reliably
-# launch on first boot, so we let Anaconda handle user/network/timezone setup
-# during install instead of relying on it.
+# Almost all Anaconda modules are enabled here for maximum flexibility
+# during install.
 
 [customizations.installer.kickstart]
 contents = """
 %post
-bootc switch --mutate-in-place --transport registry ghcr.io/corruptedbit/fedora-dev-cosmic:latest
+bootc switch --mutate-in-place --transport registry ghcr.io/corruptedbit/fedora-dev-light:latest
 %end
 """
 
