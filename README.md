@@ -1,12 +1,12 @@
 # fedora-dev-light
 
-A personal [bootc](https://github.com/bootc-dev/bootc) image based on Fedora Atomic with a lightweight desktop environment (currently [Xfce](https://www.xfce.org/), via [Fedora Xfce Atomic](https://quay.io/repository/fedora-ostree-desktops/xfce-atomic)), plus opinionated dev tooling on top.
+A personal [bootc](https://github.com/bootc-dev/bootc) image based on Fedora Atomic with a lightweight desktop environment (currently [Sway](https://swaywm.org/), via [Fedora Sway Atomic](https://quay.io/repository/fedora-ostree-desktops/sway-atomic)), plus opinionated dev tooling on top.
 
 Published at: `ghcr.io/corruptedbit/fedora-dev-light`
 
 ## What's in the image
 
-Xfce Atomic already ships a complete, lightweight desktop environment (session, compositor, Thunar file manager, ...), so this image only adds tooling on top:
+Sway Atomic already ships a complete, minimal Wayland setup (Sway compositor, waybar, launcher, terminal, ...), so this image only adds tooling on top:
 
 - Similar to [uCore](https://github.com/ublue-os/ucore): `podman-compose`, `firewalld`, `tailscale`, `distrobox`
 - **Visual Studio Code** (from Microsoft's official repo)
@@ -35,7 +35,7 @@ Reboot to apply.
 
 ## Repository layout
 
-- **`Containerfile`** — entrypoint for the image build. Pulls in `build_files/` and `system_files/` via a `FROM scratch` context stage (`ctx`), then runs `build.sh` against the `quay.io/fedora-ostree-desktops/xfce-atomic:44` base image.
+- **`Containerfile`** — entrypoint for the image build. Pulls in `build_files/` and `system_files/` via a `FROM scratch` context stage (`ctx`), then runs `build.sh` against the `quay.io/fedora-ostree-desktops/sway-atomic:44` base image.
 - **`build_files/build.sh`** — installs packages (dev tooling, Flatpak/Flathub, `ujust`), copies `system_files/` into the image root, enables `podman.socket` + `flathub-setup.service`.
 - **`system_files/`** — mirrors the final image's root filesystem: Flathub remote definition, fonts, wallpaper, custom `ujust` recipes. Its contents are merged into `/` by `build.sh`, not by a separate `COPY` in the `Containerfile`.
 - **`image-template.env`** — build metadata (`IMAGE_NAME`, `REPO_ORGANIZATION`, description, keywords, default tag, BIB image), loaded by the `Justfile` via `set dotenv-filename`.
